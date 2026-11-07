@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -5,49 +6,161 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ALOM TOPUP BD</title>
 <style>
-body {
-  margin: 0;
-  background: #101426;
-  color: white;
-  font-family: Arial, sans-serif;
-  text-align: center;
+*{box-sizing:border-box}
+body{
+ margin:0;background:#101426;color:white;
+ font-family:Arial,sans-serif;
 }
-header {
-  background: #171f38;
-  padding: 25px;
-  color: #00e5ff;
-  font-size: 26px;
-  font-weight: bold;
+header{
+ background:#171f38;padding:22px;
+ text-align:center;color:#00e5ff;
+ font-size:25px;font-weight:bold;
 }
-main {
-  padding: 25px;
+main{padding:20px;max-width:550px;margin:auto}
+h2{text-align:center;margin:25px 0}
+.games{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.game{
+ background:#202b48;padding:20px 8px;
+ border-radius:14px;text-align:center;
+ border:2px solid transparent;cursor:pointer;
 }
-.card {
-  background: #202b48;
-  padding: 25px;
-  margin: 20px auto;
-  border-radius: 15px;
-  max-width: 350px;
+.game.active{border-color:#00e5ff}
+.game span{font-size:38px}
+.game h3{margin:10px 0 0}
+.card{
+ background:#202b48;padding:20px;
+ border-radius:15px;margin-top:20px;
 }
-button {
-  background: #00c853;
-  color: white;
-  border: 0;
-  padding: 14px 30px;
-  border-radius: 8px;
-  font-size: 17px;
+label{display:block;margin:15px 0 8px}
+input,select{
+ width:100%;padding:14px;
+ border-radius:8px;border:1px solid #53617e;
+ background:#101426;color:white;font-size:16px;
 }
+button{
+ width:100%;padding:15px;border:0;
+ border-radius:9px;background:#00c853;
+ color:white;font-size:17px;font-weight:bold;
+ margin-top:18px;cursor:pointer;
+}
+button:active{opacity:.8}
+.packages{
+ display:grid;grid-template-columns:1fr 1fr;gap:10px;
+}
+.pack{
+ background:#101a32;border:2px solid #53617e;
+ padding:14px 5px;border-radius:10px;
+ text-align:center;cursor:pointer;
+}
+.pack.active{border-color:#00e5ff;color:#00e5ff}
+small{color:#aab5ce}
+#result{display:none;line-height:1.8}
+footer{text-align:center;padding:25px;color:#8995ae}
 </style>
 </head>
 <body>
+
 <header>🎮 ALOM TOPUP BD</header>
+
 <main>
-<h2>Welcome to ALOM TOPUP BD</h2>
+<h2>আপনার পছন্দের গেম নির্বাচন করুন</h2>
+
+<div class="games">
+ <div class="game active" onclick="chooseGame('Free Fire',this)">
+  <span>🔥</span><h3>Free Fire</h3>
+ </div>
+ <div class="game" onclick="chooseGame('PUBG Mobile',this)">
+  <span>🎯</span><h3>PUBG Mobile</h3>
+ </div>
+</div>
+
 <div class="card">
-<h3>🔥 Gaming TopUp</h3>
-<p>আপনার পছন্দের গেম টপআপ করুন।</p>
-<button>Order Now</button>
+ <h3 id="gameTitle">🔥 Free Fire Diamond</h3>
+
+ <label>Player ID লিখুন</label>
+ <input id="player" type="text" placeholder="আপনার Player ID">
+
+ <label>প্যাকেজ নির্বাচন করুন</label>
+ <div class="packages" id="packages"></div>
+
+ <label>আপনার নাম</label>
+ <input id="customer" type="text" placeholder="আপনার নাম">
+
+ <button onclick="makeOrder()">অর্ডার বিবরণ দেখুন</button>
+</div>
+
+<div class="card" id="result">
+ <h3>আপনার অর্ডার</h3>
+ <p id="details"></p>
+ <small>এটি অর্ডারের প্রিভিউ। পেমেন্ট বা TopUp এখনো সক্রিয় নয়।</small>
+ <button onclick="backOrder()">আবার অর্ডার করুন</button>
 </div>
 </main>
+
+<footer>© 2026 ALOM TOPUP BD</footer>
+
+<script>
+let game="Free Fire";
+let selected="";
+
+const packs={
+ "Free Fire":[
+  "25 Diamonds","50 Diamonds","115 Diamonds",
+  "240 Diamonds","355 Diamonds","610 Diamonds",
+  "1240 Diamonds"
+ ],
+ "PUBG Mobile":[
+  "60 UC","120 UC","325 UC",
+  "660 UC","1800 UC","3850 UC",
+  "8100 UC"
+ ]
+};
+
+function chooseGame(name,el){
+ game=name;
+ document.querySelectorAll(".game").forEach(x=>x.classList.remove("active"));
+ el.classList.add("active");
+ document.getElementById("gameTitle").textContent=
+ name==="Free Fire"?"🔥 Free Fire Diamond":"🎯 PUBG Mobile UC";
+ selected="";
+ showPacks();
+}
+
+function showPacks(){
+ let area=document.getElementById("packages");
+ area.innerHTML="";
+ packs[game].forEach(item=>{
+  let div=document.createElement("div");
+  div.className="pack";
+  div.textContent=item;
+  div.onclick=()=>{
+   document.querySelectorAll(".pack").forEach(x=>x.classList.remove("active"));
+   div.classList.add("active");
+   selected=item;
+  };
+  area.appendChild(div);
+ });
+}
+function makeOrder(){
+ let player=document.getElementById("player").value.trim();
+ let customer=document.getElementById("customer").value.trim();
+
+ if(!player||!customer||!selected){
+  alert("নাম, Player ID এবং প্যাকেজ নির্বাচন করুন");
+  return;
+ }
+ document.getElementById("details").innerHTML=
+ "গেম: "+game+"<br>"+
+ "প্যাকেজ: "+selected+"<br>"+
+ "Player ID: "+player+"<br>"+
+ "নাম: "+customer;
+ document.getElementById("result").style.display="block";
+ document.getElementById("result").scrollIntoView({behavior:"smooth"});
+}
+function backOrder(){
+ document.getElementById("result").style.display="none";
+}
+showPacks();
+</script>
 </body>
-  </html>
+</html>
