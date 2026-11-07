@@ -1,166 +1,281 @@
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0b1220">
 <title>ALOM TOPUP BD</title>
 <style>
+:root{
+  --bg:#09111f;--panel:#121e30;--panel2:#19283d;--line:#293b55;
+  --text:#f4f7fb;--muted:#a8b6ca;--accent:#22d6a4;--gold:#ffd166;
+  --danger:#ff8c8c;--radius:18px
+}
 *{box-sizing:border-box}
-body{
- margin:0;background:#101426;color:white;
- font-family:Arial,sans-serif;
-}
-header{
- background:#171f38;padding:22px;
- text-align:center;color:#00e5ff;
- font-size:25px;font-weight:bold;
-}
-main{padding:20px;max-width:550px;margin:auto}
-h2{text-align:center;margin:25px 0}
-.games{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.game{
- background:#202b48;padding:20px 8px;
- border-radius:14px;text-align:center;
- border:2px solid transparent;cursor:pointer;
-}
-.game.active{border-color:#00e5ff}
-.game span{font-size:38px}
-.game h3{margin:10px 0 0}
-.card{
- background:#202b48;padding:20px;
- border-radius:15px;margin-top:20px;
-}
-label{display:block;margin:15px 0 8px}
-input,select{
- width:100%;padding:14px;
- border-radius:8px;border:1px solid #53617e;
- background:#101426;color:white;font-size:16px;
-}
-button{
- width:100%;padding:15px;border:0;
- border-radius:9px;background:#00c853;
- color:white;font-size:17px;font-weight:bold;
- margin-top:18px;cursor:pointer;
-}
-button:active{opacity:.8}
-.packages{
- display:grid;grid-template-columns:1fr 1fr;gap:10px;
-}
-.pack{
- background:#101a32;border:2px solid #53617e;
- padding:14px 5px;border-radius:10px;
- text-align:center;cursor:pointer;
-}
-.pack.active{border-color:#00e5ff;color:#00e5ff}
-small{color:#aab5ce}
-#result{display:none;line-height:1.8}
-footer{text-align:center;padding:25px;color:#8995ae}
+body{margin:0;background:radial-gradient(circle at 15% 0%,#153447 0,#0b1424 38%,#080f1b 100%);color:var(--text);font-family:system-ui,-apple-system,"Noto Sans Bengali",sans-serif}
+button,input{font:inherit}
+button{cursor:pointer}
+header{padding:20px 15px;text-align:center;background:#0d1929eF;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}
+.logo{font-weight:950;font-size:26px;letter-spacing:.4px;color:var(--accent)}
+.tagline{font-size:12px;color:var(--muted);margin-top:4px}
+main{width:min(780px,100%);margin:auto;padding:17px 13px 34px}
+.hero{border:1px solid #28645d;background:linear-gradient(120deg,#123c42,#1b2c4a);border-radius:22px;padding:22px;position:relative;overflow:hidden}
+.hero:after{content:"🎮";position:absolute;right:18px;top:18px;font-size:42px;opacity:.22}
+.hero h1{font-size:23px;margin:0 0 7px;max-width:82%}
+.hero p{font-size:13px;line-height:1.7;color:#d1e8e4;margin:0;max-width:90%}
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:13px}
+.trust div{background:#101e30;border:1px solid var(--line);padding:10px 5px;border-radius:12px;text-align:center;font-size:11px;color:var(--muted)}
+.trust b{display:block;color:var(--accent);font-size:13px;margin-bottom:2px}
+.section{margin-top:21px}
+.section-title{font-size:16px;font-weight:850;margin:0 0 11px}
+.step{color:var(--accent);margin-right:5px}
+.games,.packages{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.game,.pack,.method{background:var(--panel);border:1px solid var(--line);border-radius:14px;color:var(--text);transition:.15s}
+.game{padding:14px;text-align:left;min-height:76px}
+.game strong{display:block;font-size:15px}
+.game small{display:block;color:var(--muted);margin-top:3px;font-size:11px}
+.game.active,.pack.active,.method.active{border:2px solid var(--accent);background:#15343a}
+.pack{padding:13px;text-align:left;min-height:78px}
+.pack b{display:block;color:var(--gold);font-size:18px;margin-bottom:4px}
+.pack span{font-size:13px}
+.field{margin-top:13px}
+label{display:block;font-size:13px;color:#dce6f3;margin-bottom:7px}
+input{width:100%;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:#0b1626;color:white;outline:none}
+input:focus{border-color:var(--accent);box-shadow:0 0 0 3px #22d6a41a}
+.hint{font-size:11px;color:var(--muted);margin-top:6px;line-height:1.5}
+.methods{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.method{padding:13px 5px;font-weight:800}
+.summary{background:linear-gradient(145deg,#142238,#101b2c);border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:20px}
+.summary-head{font-size:16px;font-weight:900;color:var(--accent);margin-bottom:10px}
+.summary-row{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-bottom:1px dashed #34445a;font-size:13px}
+.summary-row span:first-child{color:var(--muted)}
+.summary-row strong{text-align:right;overflow-wrap:anywhere}
+.total{font-size:19px;color:var(--gold)}
+.primary,.secondary{width:100%;border:0;border-radius:13px;padding:14px;font-weight:900;margin-top:13px}
+.primary{background:var(--accent);color:#06251d}
+.secondary{background:var(--panel2);border:1px solid var(--line);color:var(--text);margin-top:9px}
+.notice{display:none;margin-top:12px;padding:12px;border-radius:12px;background:#173c32;color:#d1ffec;font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+.notice.error{background:#48252c;color:#ffe1e1}
+.info{padding:13px;border-radius:13px;background:#111f32;border:1px solid var(--line);font-size:12px;line-height:1.7;color:var(--muted);margin-top:16px}
+.info b{color:var(--gold)}
+footer{text-align:center;color:var(--muted);font-size:11px;padding:22px 12px 28px}
+@media(max-width:390px){.logo{font-size:23px}.hero h1{font-size:20px}.games,.packages{gap:8px}.game,.pack{padding:11px}}
 </style>
 </head>
 <body>
-
-<header>🎮 ALOM TOPUP BD</header>
+<header>
+  <div class="logo">🔥 ALOM TOPUP BD</div>
+  <div class="tagline">FAST • EASY • TRUSTED GAME TOP-UP</div>
+</header>
 
 <main>
-<h2>আপনার পছন্দের গেম নির্বাচন করুন</h2>
+  <section class="hero">
+    <h1>আপনার পছন্দের গেমে টপআপ করুন</h1>
+    <p>গেম ও প্যাকেজ নির্বাচন করে Player ID এবং যোগাযোগের তথ্য দিন। আপনার অর্ডারের তথ্য তৈরি করে নিতে পারবেন।</p>
+  </section>
 
-<div class="games">
- <div class="game active" onclick="chooseGame('Free Fire',this)">
-  <span>🔥</span><h3>Free Fire</h3>
- </div>
- <div class="game" onclick="chooseGame('PUBG Mobile',this)">
-  <span>🎯</span><h3>PUBG Mobile</h3>
- </div>
-</div>
+  <div class="trust">
+    <div><b>🎮 ২টি গেম</b>গেম নির্বাচন</div>
+    <div><b>💎 একাধিক প্যাক</b>প্যাকেজ বাছাই</div>
+    <div><b>📱 সহজ অর্ডার</b>তথ্য তৈরি</div>
+  </div>
 
-<div class="card">
- <h3 id="gameTitle">🔥 Free Fire Diamond</h3>
+  <section class="section">
+    <h2 class="section-title"><span class="step">01.</span>গেম নির্বাচন করুন</h2>
+    <div class="games">
+      <button type="button" class="game active" data-game="Free Fire" onclick="chooseGame(this)">
+        <strong>🔥 Free Fire</strong><small>ডায়মন্ড টপআপ</small>
+      </button>
+      <button type="button" class="game" data-game="PUBG Mobile" onclick="chooseGame(this)">
+        <strong>🎯 PUBG Mobile</strong><small>UC টপআপ</small>
+      </button>
+    </div>
+  </section>
 
- <label>Player ID লিখুন</label>
- <input id="player" type="text" placeholder="আপনার Player ID">
+  <section class="section">
+    <h2 class="section-title"><span class="step">02.</span>প্যাকেজ নির্বাচন করুন</h2>
+    <div class="packages" id="packages"></div>
+  </section>
 
- <label>প্যাকেজ নির্বাচন করুন</label>
- <div class="packages" id="packages"></div>
+  <section class="section">
+    <h2 class="section-title"><span class="step">03.</span>Player ও যোগাযোগের তথ্য</h2>
+    <div class="field">
+      <label for="playerId">Player ID *</label>
+      <input id="playerId" type="text" inputmode="numeric" placeholder="আপনার Player ID লিখুন" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="playerName">Player Name (ঐচ্ছিক)</label>
+      <input id="playerName" type="text" placeholder="গেমের নাম লিখুন" autocomplete="off">
+    </div>
+    <div class="field">
+      <label for="phone">মোবাইল নম্বর *</label>
+      <input id="phone" type="tel" inputmode="tel" placeholder="01XXXXXXXXX" autocomplete="tel">
+    </div>
+  </section>
 
- <label>আপনার নাম</label>
- <input id="customer" type="text" placeholder="আপনার নাম">
+  <section class="section">
+    <h2 class="section-title"><span class="step">04.</span>পেমেন্ট পদ্ধতি নির্বাচন করুন</h2>
+    <div class="methods">
+      <button type="button" class="method active" onclick="choosePay(this,'বিকাশ')">বিকাশ</button>
+      <button type="button" class="method" onclick="choosePay(this,'নগদ')">নগদ</button>
+      <button type="button" class="method" onclick="choosePay(this,'রকেট')">রকেট</button>
+    </div>
+    <div class="field">
+      <label for="trx">Transaction ID (ঐচ্ছিক)</label>
+      <input id="trx" type="text" placeholder="পেমেন্ট করলে TrxID লিখুন" autocomplete="off">
+      <div class="hint">এখনো পেমেন্ট করবেন না। পেমেন্ট নম্বর ও নির্দেশনা পরে যোগ করা হবে।</div>
+    </div>
+  </section>
 
- <button onclick="makeOrder()">অর্ডার বিবরণ দেখুন</button>
-</div>
+  <section class="summary">
+    <div class="summary-head">🧾 অর্ডার সামারি</div>
+    <div class="summary-row"><span>গেম</span><strong id="sGame">Free Fire</strong></div>
+    <div class="summary-row"><span>প্যাকেজ</span><strong id="sPack">১০০ ডায়মন্ড</strong></div>
+    <div class="summary-row"><span>পেমেন্ট পদ্ধতি</span><strong id="sPay">বিকাশ</strong></div>
+    <div class="summary-row"><span>সর্বমোট</span><strong class="total" id="sPrice">৳৮০</strong></div>
+    <button class="primary" type="button" onclick="createOrder()">অর্ডারের তথ্য তৈরি করুন</button>
+    <button class="secondary" type="button" onclick="copyOrder()">অর্ডারের তথ্য কপি করুন</button>
+    <div class="notice" id="notice" role="status" aria-live="polite"></div>
+  </section>
 
-<div class="card" id="result">
- <h3>আপনার অর্ডার</h3>
- <p id="details"></p>
- <small>এটি অর্ডারের প্রিভিউ। পেমেন্ট বা TopUp এখনো সক্রিয় নয়।</small>
- <button onclick="backOrder()">আবার অর্ডার করুন</button>
-</div>
+  <div class="info">
+    <b>গুরুত্বপূর্ণ তথ্য</b><br>
+    এটি সম্পূর্ণ ব্যবহারযোগ্য ফ্রন্টএন্ড ডেমো। এখানে বাস্তব টাকা কাটা, পেমেন্ট গ্রহণ, গেমে ডায়মন্ড/UC পাঠানো বা অনলাইনে অর্ডার সার্ভারে জমা হয় না। বাস্তব ব্যবসার জন্য নিরাপদ সার্ভার, ডেটাবেজ, অ্যাডমিন লগইন এবং অনুমোদিত পেমেন্ট গেটওয়ে যুক্ত করতে হবে। কখনো কাউকে PIN বা OTP দেবেন না।
+  </div>
 </main>
 
-<footer>© 2026 ALOM TOPUP BD</footer>
+<footer>© 2026 ALOM TOPUP BD · All rights reserved</footer>
 
 <script>
-let game="Free Fire";
-let selected="";
-
-const packs={
- "Free Fire":[
-  "25 Diamonds","50 Diamonds","115 Diamonds",
-  "240 Diamonds","355 Diamonds","610 Diamonds",
-  "1240 Diamonds"
- ],
- "PUBG Mobile":[
-  "60 UC","120 UC","325 UC",
-  "660 UC","1800 UC","3850 UC",
-  "8100 UC"
- ]
+/*
+  ভবিষ্যতে পরিবর্তনের জায়গা:
+  ১) নিচের CONFIG.packages অংশে প্যাকেজের নাম ও দাম বদলাবেন।
+  ২) paymentNumbers ও whatsappNumber পরে যোগ করা যাবে।
+*/
+const CONFIG = {
+  packages: {
+    "Free Fire": [
+      {name:"১০০ ডায়মন্ড", price:80},
+      {name:"২০০ ডায়মন্ড", price:155},
+      {name:"৫০০ ডায়মন্ড", price:370},
+      {name:"১০০০ ডায়মন্ড", price:730}
+    ],
+    "PUBG Mobile": [
+      {name:"৬০ UC", price:85},
+      {name:"১৮০ UC", price:250},
+      {name:"৩২৫ UC", price:430},
+      {name:"৬৬০ UC", price:850}
+    ]
+  },
+  paymentNumbers: {bkash:"", nagad:"", rocket:""},
+  whatsappNumber: ""
 };
 
-function chooseGame(name,el){
- game=name;
- document.querySelectorAll(".game").forEach(x=>x.classList.remove("active"));
- el.classList.add("active");
- document.getElementById("gameTitle").textContent=
- name==="Free Fire"?"🔥 Free Fire Diamond":"🎯 PUBG Mobile UC";
- selected="";
- showPacks();
-}
+let selectedGame = "Free Fire";
+let selectedPayment = "বিকাশ";
+let selectedPackage = CONFIG.packages[selectedGame][0];
 
-function showPacks(){
- let area=document.getElementById("packages");
- area.innerHTML="";
- packs[game].forEach(item=>{
-  let div=document.createElement("div");
-  div.className="pack";
-  div.textContent=item;
-  div.onclick=()=>{
-   document.querySelectorAll(".pack").forEach(x=>x.classList.remove("active"));
-   div.classList.add("active");
-   selected=item;
+function taka(amount) {
+  return "৳" + Number(amount).toLocaleString("en-US");
+}
+function showNotice(message, isError=false) {
+  const box=document.getElementById("notice");
+  box.style.display="block";
+  box.classList.toggle("error",isError);
+  box.textContent=message;
+}
+function updateSummary() {
+  document.getElementById("sGame").textContent=selectedGame;
+  document.getElementById("sPack").textContent=selectedPackage.name;
+  document.getElementById("sPay").textContent=selectedPayment;
+  document.getElementById("sPrice").textContent=taka(selectedPackage.price);
+}
+function renderPackages() {
+  const box=document.getElementById("packages");
+  box.replaceChildren();
+  CONFIG.packages[selectedGame].forEach((item,index)=>{
+    const button=document.createElement("button");
+    button.type="button";
+    button.className="pack"+(index===0?" active":"");
+    const price=document.createElement("b");
+    price.textContent=taka(item.price);
+    const name=document.createElement("span");
+    name.textContent=item.name;
+    button.append(price,name);
+    button.addEventListener("click",()=>{
+      box.querySelectorAll(".pack").forEach(el=>el.classList.remove("active"));
+      button.classList.add("active");
+      selectedPackage=item;
+      updateSummary();
+    });
+    box.appendChild(button);
+  });
+  selectedPackage=CONFIG.packages[selectedGame][0];
+  updateSummary();
+}
+function chooseGame(button) {
+  document.querySelectorAll(".game").forEach(el=>el.classList.remove("active"));
+  button.classList.add("active");
+  selectedGame=button.dataset.game;
+  renderPackages();
+  document.getElementById("notice").style.display="none";
+}
+function choosePay(button,value) {
+  document.querySelectorAll(".method").forEach(el=>el.classList.remove("active"));
+  button.classList.add("active");
+  selectedPayment=value;
+  updateSummary();
+}
+function orderDetails() {
+  const playerId=document.getElementById("playerId").value.trim();
+  const playerName=document.getElementById("playerName").value.trim();
+  const phone=document.getElementById("phone").value.trim();
+  const trx=document.getElementById("trx").value.trim();
+  if(!playerId || !phone) {
+    showNotice("অনুগ্রহ করে Player ID এবং মোবাইল নম্বর পূরণ করুন।",true);
+    return null;
+  }
+  return {
+    id:"ALOM-"+Date.now().toString().slice(-8),
+    game:selectedGame, package:selectedPackage.name, price:selectedPackage.price,
+    playerId, playerName, phone, payment:selectedPayment, trx,
+    createdAt:new Date().toLocaleString("bn-BD")
   };
-  area.appendChild(div);
- });
 }
-function makeOrder(){
- let player=document.getElementById("player").value.trim();
- let customer=document.getElementById("customer").value.trim();
-
- if(!player||!customer||!selected){
-  alert("নাম, Player ID এবং প্যাকেজ নির্বাচন করুন");
-  return;
- }
- document.getElementById("details").innerHTML=
- "গেম: "+game+"<br>"+
- "প্যাকেজ: "+selected+"<br>"+
- "Player ID: "+player+"<br>"+
- "নাম: "+customer;
- document.getElementById("result").style.display="block";
- document.getElementById("result").scrollIntoView({behavior:"smooth"});
+function formatOrder(order) {
+  return [
+    "ALOM TOPUP BD — অর্ডার তথ্য",
+    "অর্ডার নম্বর: "+order.id,
+    "গেম: "+order.game,
+    "প্যাকেজ: "+order.package,
+    "মূল্য: "+taka(order.price),
+    "Player ID: "+order.playerId,
+    "Player Name: "+(order.playerName||"দেওয়া হয়নি"),
+    "মোবাইল: "+order.phone,
+    "পেমেন্ট: "+order.payment,
+    "TrxID: "+(order.trx||"দেওয়া হয়নি"),
+    "সময়: "+order.createdAt,
+    "",
+    "নোট: এটি ডেমো অর্ডার; সার্ভারে জমা হয়নি এবং পেমেন্ট যাচাই হয়নি।"
+  ].join("\n");
 }
-function backOrder(){
- document.getElementById("result").style.display="none";
+function createOrder() {
+  const order=orderDetails();
+  if(!order) return;
+  showNotice("অর্ডারের তথ্য তৈরি হয়েছে!\n\n"+formatOrder(order));
 }
-showPacks();
+async function copyOrder() {
+  const order=orderDetails();
+  if(!order) return;
+  const text=formatOrder(order);
+  try {
+    await navigator.clipboard.writeText(text);
+    showNotice("অর্ডারের তথ্য কপি হয়েছে। এখন যেখানে প্রয়োজন সেখানে পেস্ট করতে পারবেন।\n\nঅর্ডার নম্বর: "+order.id);
+  } catch(e) {
+    showNotice("এই ব্রাউজারে অটো-কপি চালু নেই। নিচের তথ্য চেপে ধরে কপি করুন:\n\n"+text);
+  }
+}
+renderPackages();
 </script>
 </body>
-</html>
+ </html>
